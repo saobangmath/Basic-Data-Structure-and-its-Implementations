@@ -1,0 +1,30 @@
+class Node:
+    def __init__(self,data):
+        self.data = data
+        self.next = None 
+class Solution: 
+    def display(self,head):
+        current = head
+        while current:
+            print(current.data,end=' ')
+            current = current.next
+
+    def insert(self,head,data): // the function here is  more likely to be a VOID func as its MAIN functionality is just adding the next Node to the last 
+        if head is None:
+            head=Node(data)
+            
+        else:
+            cur=head
+            while (cur.next):
+                cur=cur.next
+            cur.next=Node(data)
+        return head // return things here is just the first element( HEAD) of the LinkedList
+    #Complete this method
+
+mylist= Solution()
+T=int(input())
+head=None
+for i in range(T):
+    data=int(input())
+    head=mylist.insert(head,data)    // head here is unchanged most of the time.
+mylist.display(head); 
