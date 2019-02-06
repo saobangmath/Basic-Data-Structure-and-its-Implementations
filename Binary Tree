@@ -54,7 +54,20 @@ def preOrder(root):
                     preOrder(root.left) #recursive part
                 if (root.right):
                     preOrder(root.right) #recursive part
-
+# print the binary Tree in order
+def inOrder(root):
+    #Write your code here
+    if (root is None):
+        print(' ',end=' ')
+    else:
+        if not(root.left) and not(root.right):
+            print(root.__str__(),end=' ')
+        else:
+            if (root.left):
+                inOrder(root.left)
+            print(root.__str__(),end=' ')
+            if (root.right):
+                inOrder(root.right)
 
 tree = BinarySearchTree()
 t = int(input())
