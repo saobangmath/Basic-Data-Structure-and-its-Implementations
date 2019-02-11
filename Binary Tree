@@ -1,80 +1,60 @@
-class Node:
-    def __init__(self, info): 
-        self.info = info  
-        self.left = None  
-        self.right = None 
-        self.level = None 
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct Node{
+    struct Node* left;
+    struct Node* right;
+    int data;
+}Node;
+Node* newNode(int data){
+    Node* node=(Node*)malloc(sizeof(Node));
+    node->left=node->right=NULL;
+    node->data=data;
+    return node;
+}
 
-    def __str__(self):
-        return str(self.info) 
-
-class BinarySearchTree:
-    def __init__(self): 
-        self.root = None
-
-    def create(self, val):  
-        if self.root == None:
-            self.root = Node(val)
-        else:
-            current = self.root
-         
-            while True:
-                if val < current.info:
-                    if current.left:
-                        current = current.left
-                    else:
-                        current.left = Node(val)
-                        break
-                elif val > current.info:
-                    if current.right:
-                        current = current.right
-                    else:
-                        current.right = Node(val)
-                        break
-                else:
-                    break
-
-"""
-Node is defined as
-self.left (the left child of the node)
-self.right (the right child of the node)
-self.info (the value of the node)
-"""
-def preOrder(root):
-    #Write your code here
-    if (root is None):
-        print()
-    else:
-        if (root):
-            if root.left is None and root.right is None:
-                print(root.__str__(), end=' ') #end here to ensure that the res will in the same line
-            else:
-                print(root.__str__(),end=' ')#end here to ensure that the res will in the same line
-                if (root.left):
-                    preOrder(root.left) #recursive part
-                if (root.right):
-                    preOrder(root.right) #recursive part
-# print the binary Tree in order
-def inOrder(root):
-    #Write your code here
-    if (root is None):
-        print(' ',end=' ')
-    else:
-        if not(root.left) and not(root.right):
-            print(root.__str__(),end=' ')
-        else:
-            if (root.left):
-                inOrder(root.left)
-            print(root.__str__(),end=' ')
-            if (root.right):
-                inOrder(root.right)
-
-tree = BinarySearchTree()
-t = int(input())
-
-arr = list(map(int, input().split()))
-
-for i in range(t):
-    tree.create(arr[i])
-
-preOrder(tree.root)
+int getHeight(Node* root){
+  //Write your code here
+  if (root== NULL){
+      return 0;
+  }
+  else{
+      int max_left=0,max_right=0;
+      if (root->left){
+          max_left=1+getHeight(root->left);
+      }
+      if (root->right){
+          max_right=1+getHeight(root->right);
+      }
+      return (max_left>max_right)?max_left:max_right;
+  }
+}
+Node* insert(Node* root,int data){
+    if(root==NULL)
+        return newNode(data);
+    else{
+        Node* cur;
+        if(data<=root->data){
+            cur=insert(root->left,data);
+            root->left=cur;                
+        }
+        else{
+            cur=insert(root->right,data);
+            root->right=cur;
+        }
+        
+    }
+    return root;
+}
+int main(){
+    Node* root=NULL;
+    int T,data;
+    scanf("%d",&T);
+    while(T-->0){
+        scanf("%d",&data);
+        root=insert(root,data);
+    }
+    int height=getHeight(root);
+    printf("%d",height);
+    return 0;
+    
+}
