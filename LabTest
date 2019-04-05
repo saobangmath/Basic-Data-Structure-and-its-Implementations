@@ -1,0 +1,32 @@
+Stack* lineEditor(char* line){
+    /* add your code here */
+    int up=0;
+    Stack s;
+    int i;
+    for (i=0;i<strlen(line);i++){
+        if (isalpha(line[i])){
+            if (!up){
+                push(&s,line[i]);}
+            else{
+                push(&s,toupper(line[i]));
+                up=1;
+            }
+        }
+        else if (line[i]=='*'){
+            if (!isEmptyStack(s)){
+                pop(&s);
+            }
+        }
+        else if (line[i]=='^'){
+            up=1;
+        }
+        else if (line[i]=='\'){
+            push(&s,'\n');
+        }
+        else if (line[i]=='#'){
+            while (peek(s)!='\n'){
+                pop(s);
+            }
+        }
+    }
+}
