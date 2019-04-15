@@ -1,0 +1,62 @@
+class Graph 
+{ 
+    int V;              // No. of vertices 
+    vector<int> *adj;     // Pointer to an array containing
+    Graph(int V); //constructor
+    void addEdge(int v, int w); //add edge
+    pair<int,int> bfs(int u); // breath first search to find the longest distance from a vertex
+    int longestPathLength(); // longest path within a graph with not visiting a node again
+}
+
+
+
+    // constructor
+Graph::Graph(int V){
+        this->V = V; 
+        adj = new vector<int>[V];
+    };
+    // add edge func
+void Graph::addEdge(int v, int w){
+        adj[v].push_back(w);
+        adj[w].push_back(v);
+    };
+    
+    pair<int, int> bfs(int u){
+        int dist[V];
+        memset(dist,-1,sizeof(dist));
+        queue<int> q;
+        dist[u]=0;
+        q.push(u);
+        
+        while (!q.empty()){
+            int num=q.front();
+            q.pop();
+            for (auto it=adj[num].begin(); it<adj[num].end(); it++){
+                int v= *it;
+                if (dist[v]==-1){ // the v vertex is not visted
+                     q.push(v);
+                     dist[v]=dist[num]+1;
+                }
+            }
+        }
+        int maxDist=0;
+        int node=0;
+        for (int i=0;i<V;i++){
+            if (dist[i]>maxDist){
+                maxDist=dist[i];
+                node=i;
+            }
+        }
+        return make_pair(node,maxDist);
+        
+    }; 
+    
+int Graph::longestPathLength(){
+        pair<int,int> t1,t2;
+        t1 = bfs(0);
+        t2 = bfs(t1.first);
+        return t2.second;
+    }; 
+                                
+
+
