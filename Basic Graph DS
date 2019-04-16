@@ -6,6 +6,7 @@ class Graph
     void addEdge(int v, int w); //add edge
     pair<int,int> bfs(int u); // breath first search to find the longest distance from a vertex
     int longestPathLength(); // longest path within a graph with not visiting a node again
+    bool dfs(int v,bool visited[],bool recStack[]);
 }
 
 
@@ -57,6 +58,26 @@ int Graph::longestPathLength(){
         t2 = bfs(t1.first);
         return t2.second;
     }; 
+bool Graph::dfs(int v,bool visited[],bool recStack[]){
+            if (!visited[v]){
+                visited [v]=  true;
+                recStack[v]=  true;
+                for (auto it=adj[v].begin(); it!=adj[v].end(); it++){
+                    if (recStack[*it]){
+                        return true; 
+                    }
+                    if (!visited[*it] && dfs(*it,visited,recStack)){
+                        
+                        return true;
+                    }
+                    
+                    
+                }
+            
+        }
+        recStack[v] = false;  // remove the vertex from recursion stack 
+         return false; 
+    }
                                 
 
 
