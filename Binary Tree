@@ -113,4 +113,48 @@ bool checkBST(Node* root) {
                      &&isBST(root->right,root->data,max);
             }
         }
+// find the minimum BTNode* that has minimum value   
+BTNode *findNode(BTNode **nodePtr){
+    if (!(*nodePtr)->left ){
+        return (*nodePtr);
     }
+    else{
+        return findNode(&(*nodePtr)->left);
+    }
+}
+// remove a target BTNode within a binary TReee
+int removeBSTNode(BTNode **nodePtr, int item){
+/* Write your program code here. */
+    if (*nodePtr ==NULL){
+        return 0;
+    }
+    else{
+        BTNode *p;
+        // in case the value of the root is bigger than such target
+        if ((*nodePtr)->item > item){
+            return removeBSTNode(&(*nodePtr)->left, item);
+        }  
+        // in case root value is smaller than the target one
+        else if ((*nodePtr)->item <item){
+            return removeBSTNode(&(*nodePtr)->right, item);
+        }
+        else{ // successfully find such value
+        // has both left and right sides
+            if ((*nodePtr)->left!=NULL && (*nodePtr)->right){
+                p= findNode(&(*nodePtr)->right); // find the next value in the array after the targeting one in the incresasing array
+                (*nodePtr)->item= p->item;
+                return removeBSTNode(&(*nodePtr)->right,p->item);
+            }
+            else{
+            // have no children or at most 1
+                if ((*nodePtr)->left){
+                    (*nodePtr)=(*nodePtr)->left;
+                }
+                else{
+                     (*nodePtr)=(*nodePtr)->right;
+                }
+                return 1;
+            }
+        }
+    }
+}
