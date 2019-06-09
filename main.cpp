@@ -1,80 +1,43 @@
-#include <iostream>
+#include <bits/stdc++.h>
+const int ALPHABET_SIZE = 26;
 using namespace std;
-struct Interval{
-    int open ,close;
+struct TrieNode{
+    struct TrieNode *children[ALPHABET_SIZE];
+    bool isEndOfWord ;
 };
-struct ITNode{
-    Interval *i;
-    int max; // store the maximum value of the subtree
-    ITNode *left, *right;
+TrieNode *getNode(void){
+    struct TrieNode *pNode = new TrieNode();
+    pNode->isEndOfWord = false;
+    for(int i = 0; i< ALPHABET_SIZE;i++){
+        pNode->children[i] = NULL;
+    }
+    return pNode;
 };
-
-ITNode* newNode(Interval i){
-    ITNode *temp = new ITNode();
-    temp->i = new Interval(i);
-    temp->left=temp->right = NULL;
-    temp->max = i.close;
-    return temp;
+void insertTrie(struct TrieNode *root, std::string key){
+    struct TrieNode *p = root;
+    for (int i= 0; i < key.length();i++){
+        int index = key[i] - 'a';
+        if (! p->children[index]){
+            p->children[index] = getNode();
+        }
+        p = p->children[index];
+    }
+    p->isEndOfWord = true;
 };
-
-//insert  function to insert new Interval in the IT Tree
-ITNode *insert(ITNode *root, Interval i){
-    if (root == NULL){
-        return newNode(i);
+bool searchTrie(struct TrieNode *root,std::string key){
+  struct TrieNode *p = root;
+  for (int i = 0; i<key.length() ;i++){
+    if (!p->children[i]){
+        return false;
     }
     else{
-        int open = root->i->open;
-        if (open > i.open){
-            root->left = insert(root->left,i);
-        }
-        else{
-            root->right = insert(root->right,i);
-        }
-        if (root->max < i.close){
-            root->max = i.close;
-        }
-        return root;
+        p = p->children[i];
     }
-}
-bool doOverLap(Interval i1, Interval i2){
-    if (i1.open <= i2.close && i2.open <=i1.close){
-        return true;
-    }return false;
-}
-Interval *overlapSearch(ITNode *root, Interval i){
-    if (root == NULL){
-        return NULL;
-    }
-    else{
-        if (doOverLap(*(root->i),i)){
-            return root->i;
-        }
-        else{
-            if (root->left != NULL && root->left->max >=i.open){
-                return overlapSearch(root->left, i);
-            }
-            else{
-                return overlapSearch(root->right,i);
-            }
-        }
-    }
-}
+  }
+  return (p!=NULL && p->isEndOfWord);
+};
 int main()
 {
-    Interval ints[] = {{15, 20}, {10, 30}, {17, 19},
-        {5, 20}, {12, 15}, {30, 40}
-    };
-    int n = sizeof(ints)/sizeof(ints[0]);
-    ITNode *root = NULL;
-    for (int i = 0; i < n; i++)
-        root = insert(root, ints[i]);
-    Interval x = {6, 7};
-
-    cout << "\nSearching for interval [" << x.open << "," << x.close << "]";
-    Interval *res = overlapSearch(root, x);
-    if (res == NULL)
-        cout << "\nNo Overlapping Interval";
-    else
-        cout << "\nOverlaps with [" << res->open << ", " << res->close << "]";
+    cout << "Hello world!" << endl;
     return 0;
 }
